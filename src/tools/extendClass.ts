@@ -15,7 +15,9 @@ class BaseMenu {
 }
 
 export class ButtonMenu extends BaseMenu {
-    super();
+    constructor(props) {
+        super(props);
+    }
 
     exec() {
         console.log('hello')
@@ -23,7 +25,9 @@ export class ButtonMenu extends BaseMenu {
 }
 
 export default class SelectMenu extends BaseMenu {
-    super();
+    constructor(props) {
+        super(props);
+    }
 
     exec() {
         return ['item1', 'item2', 'item3']
