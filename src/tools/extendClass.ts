@@ -40,5 +40,4 @@ const buttonM = new SelectMenu({
     icon: 'dsdsa'
 });
 
-console.log(buttonM.exec())
 

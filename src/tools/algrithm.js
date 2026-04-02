@@ -107,3 +107,38 @@ export function selectSort(arr) {
     }
     return arr;
 }
+
+// 找到和数组的度一样的度子数组的最短长度
+export function findShortestSubArray(arr) {
+    const elementInfo = {}
+
+    for (let i = 0 ;i  < arr.length; i ++) {
+        if (!elementInfo[arr[i]]) {
+            elementInfo[arr[i]] = {
+                first: i,
+                last: i,
+                count: 1
+            }
+        } else {
+            elementInfo[arr[i]].last = i;
+            elementInfo[arr[i]].count += 1;
+        }
+    }
+
+    let maxCount = 0;
+    Object.values(elementInfo).forEach((info) => {
+        if (info.count > maxCount) {
+            maxCount = info.count;
+        }
+    })
+
+
+    let minLength = arr.length;
+    Object.entries(elementInfo).forEach(([num, info]) => {
+        if (info.count === maxCount) {
+            const curLength = info.last - info.first + 1;
+            minLength = Math.min(curLength, minLength);
+        }
+    })
+    return minLength;
+}

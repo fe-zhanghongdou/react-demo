@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, forwardRef } from "react";
 
 type ChildProps = {
-    count: number;
-    [key: string]: string | number;
-}
+  count: number;
+  [key: string]: string | number;
+};
 
-export default function Child(props: ChildProps) {
-    useEffect(() => {
-        console.log('count:', props.count);
-    }, [props.count])
+const Child = forwardRef((props: any, ref) => {
+  React.useMemo(() => {
+    console.log("count:", props.count);
+  }, [props.count]);
+  return <div ref={ref}>Child {props.count}</div>;
+});
 
-  return (
-    <div>Child { props.count }</div>
-  )
-}
-
+export default Child;

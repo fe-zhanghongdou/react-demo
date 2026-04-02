@@ -1,26 +1,79 @@
-import React, { useState,memo } from "react";
-import { createPortal } from "react-dom";
+import React, { useEffect, type ReactElement } from 'react'
+import styled from './Modal.module.css'
 
-export default memo(function Modal({ open, onClose, children, getData }) {
-	const [childCount, setChildCount] = useState(1.1);
 
-	console.log('子组件渲染了')
+interface ModalProps {
+  visible: boolean;
+  title?: string;
+  onClose?: () => void;
+  onConfirm?:() => void;
+  maskClosable?: true;
+  children?: React.ReactElement[]
+}
 
-  if (!open) return null;
-  return createPortal(
-    <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center"
-      onClick={onClose}
-    >
-      <div
-        className="bg-white p-6 rounded-xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-				<button className="bg-sky-500 hover:bg-sky-700" onClick={getData}>按钮</button>
+const Modal: React.FC<ModalProps> = ({
+  visible,
+  title,
+  onClose,
+  onConfirm,
+  maskClosable = true,
+  children
+}) => {
 
-        {children}
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  }, [visible])
+
+  const handleMaskClick = () => {
+    if (!maskClosable) return;
+    onClose?.();
+  }
+
+  const slots = {
+    title: null,
+    content: null,
+    footer: null,
+  }
+  React.Children.forEach(children, (child: ReactElement) => {
+    const { slot } = child.props;
+    if (slots && Object.prototype.hasOwnProperty.call(slots, slot)) {
+      slots[slot] = child;
+    }
+  })
+
+  if (!visible) return null;
+  return (
+    <div className={styled['modal-overlay']} onClick={handleMaskClick}>
+      <div className={ styled['modal-content'] } onClick={(e) => e.stopPropagation()}>
+        {
+          slots.title && <div className='modal-header'>
+            { slots.title }
+          </div>
+        }
+        {
+          slots.content && <div className='modal-body'>
+            { slots.content }
+          </div>
+        }
+        {
+          slots.footer && <div className='modal-footer'>
+            { slots.footer }
+          </div>
+        }
       </div>
-    </div>,
-    document.body,
-  );
-})
+    </div>
+  )
+}
+
+interface ModalSlotType {
+  children?: React.ReactNode;
+  slot: string;
+}
+
+export const ModalSlot = ({ children }: ModalSlotType) => children;
+
+export default Modal;

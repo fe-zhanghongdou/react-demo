@@ -1,0 +1,23 @@
+.box-columns {
+  columns: 100px 3;
+  column-rule: 2px dotted #ccc;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+@keyframes example {
+    0% { background-color: red; }
+    100% { background-color: yellow; }
+}
+.element {
+    animation: example 2s infinite;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 24px;
+  }
+}
